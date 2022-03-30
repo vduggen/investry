@@ -1,19 +1,19 @@
 <template>
   <v-app>
-    <TheSidebar />
+    <router-view name="TheSidebar"></router-view>
 
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import TheSidebar from './components/layout/TheSidebar.vue';
+import Component from 'vue-class-component';
 
-export default Vue.extend({
-  components: { TheSidebar },
-  name: 'App',
-});
+@Component({})
+export default class App extends Vue {
+
+}
 </script>
