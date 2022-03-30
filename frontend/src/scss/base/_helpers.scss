@@ -1,0 +1,34 @@
+// -----------------------------------------------------------------------------
+// This file contains CSS helper classes.
+// -----------------------------------------------------------------------------
+
+
+/**
+ * Set width 100%
+ */
+.iy__w-100 {
+  width: 100%;
+}
+
+/**
+ * Set height 100%
+ */
+.iy__h-100 {
+  height: 100%;
+}
+
+/**
+ * Align item with flexbox in center
+ */
+.iy__flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * Set background to page
+ */
+.iy-bg__page {
+  background: $light-grey;
+}
