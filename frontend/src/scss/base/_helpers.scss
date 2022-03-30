@@ -29,6 +29,13 @@
 /**
  * Set background to page
  */
-.iy-bg__page {
+.iy__bg-page {
   background: $light-grey;
+}
+
+/**
+ * Set box shadow
+ */
+.iy__box-shadow {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
