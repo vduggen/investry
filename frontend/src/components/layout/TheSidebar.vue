@@ -33,6 +33,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import { RouteConfig } from 'vue-router';
 import TheSidebarMenu from './TheSidebarMenu.vue';
 import TheSidebarMenuChildren from './TheSidebarMenuChildren.vue';
 
@@ -45,14 +46,48 @@ import TheSidebarMenuChildren from './TheSidebarMenuChildren.vue';
 export default class TheSidebar extends Vue {
   mini = false;
 
+  private routes: RouteConfig[] = [];
+
   setDrawer(value: boolean) {
     this.mini = value;
   }
 
   get menus() {
-    const { routes } = this.$router.options;
+    this.routes = this.$router.options.routes || [];
 
-    return routes;
+    return this.filterRoutes();
+  }
+
+  private filterRoutes() {
+    const tmp: RouteConfig[] = [];
+
+    this.routes.forEach((route: RouteConfig) => {
+      const { children, meta } = route;
+
+      // verifica a flag viewMenu e verifica se existe rotas filhas
+      const result = meta?.viewMenu && children
+        ? TheSidebar.filterChildren(route, children)
+        : route;
+
+      tmp.push(result);
+    });
+
+    return tmp;
+  }
+
+  private static filterChildren(masterMenu: RouteConfig, children: RouteConfig[]): RouteConfig {
+    const getFilterMenus = children.filter(({ meta }) => meta?.viewMenu);
+    const hasAnyFilterResult = getFilterMenus.length > 0;
+
+    const copyObj = masterMenu;
+
+    if (hasAnyFilterResult) {
+      copyObj.children = getFilterMenus;
+    } else {
+      delete copyObj.children;
+    }
+
+    return copyObj;
   }
 }
 </script>
