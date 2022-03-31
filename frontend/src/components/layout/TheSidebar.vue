@@ -1,10 +1,10 @@
 <template>
   <v-navigation-drawer class="sidebar" :mini-variant.sync="mini" app>
-    <header class="px-3 pt-5 pb-3 d-flex justify-center">
+    <header class="sidebar__header">
       <img
         src="@/assets/logo-iniciais.svg"
         alt="Logo com as iniciais IY"
-        style="width: 32px"
+        class="sidebar__logo"
       />
     </header>
 
@@ -93,7 +93,22 @@ export default class TheSidebar extends Vue {
 </script>
 
 <style lang="scss">
+@import "~vuetify/src/styles/main.sass";
+
 .sidebar {
   @extend .iy__box-shadow;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+
+    @extend .px-3;
+    @extend .pt-5;
+    @extend .pb-3;
+  }
+
+  &__logo {
+    width: 32px;
+  }
 }
 </style>
