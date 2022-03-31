@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <router-view name="TheSidebar"></router-view>
+    <router-view name="TheSidebar" />
 
-    <v-main>
+    <v-main class="iy__bg-page">
       <router-view />
     </v-main>
   </v-app>
@@ -13,7 +13,5 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 
 @Component({})
-export default class App extends Vue {
-
-}
+export default class App extends Vue {}
 </script>
