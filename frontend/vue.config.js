@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
@@ -7,10 +8,8 @@ module.exports = defineConfig({
 
   css: {
     loaderOptions: {
-      sass: {
-        additionalData: `
-          @import "@/scss/main.scss"
-        `,
+      scss: {
+        additionalData: `@import "@/scss/main.scss";`,
       },
     },
   },

@@ -2,40 +2,41 @@
 // This file contains CSS helper classes.
 // -----------------------------------------------------------------------------
 
+.iy {
+  /**
+  * Set width 100%
+  */
+  &__w-100 {
+    width: 100%;
+  }
 
-/**
- * Set width 100%
- */
-.iy__w-100 {
-  width: 100%;
-}
+  /**
+  * Set height 100%
+  */
+  &__h-100 {
+    height: 100%;
+  }
 
-/**
- * Set height 100%
- */
-.iy__h-100 {
-  height: 100%;
-}
+  /**
+  * Align item with flexbox in center
+  */
+  &__flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-/**
- * Align item with flexbox in center
- */
-.iy__flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  /**
+  * Set background to page
+  */
+  &__bg-page {
+    background-color: $light-grey;
+  }
 
-/**
- * Set background to page
- */
-.iy__bg-page {
-  background: $light-grey;
-}
-
-/**
- * Set box shadow
- */
-.iy__box-shadow {
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  /**
+  * Set box shadow
+  */
+  &__box-shadow {
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  }
 }
