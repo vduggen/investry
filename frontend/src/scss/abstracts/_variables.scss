@@ -2,26 +2,30 @@
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
 
-/// Copy text color
-/// @type Color
 $text-color: rgb(34, 34, 34) !default;
-
-/// Main brand color
-/// @type Color
 $brand-color: rgb(17, 202, 109) !default;
-
-/// Light white
-/// @type Color
 $white-color: rgb(255, 255, 255) !default;
-
-/// Light grey
-/// @type Color
 $light-grey: rgb(237, 237, 237) !default;
-
-/// Medium grey
-/// @type Color
 $mid-grey: rgb(153, 153, 153) !default;
-
-/// Dark grey
-/// @type Color
 $dark-grey: rgb(68, 68, 68) !default;
+
+$iy-blue:    #0d6efd;
+$iy-indigo:  #6610f2;
+$iy-purple:  #6f42c1;
+$iy-pink:    #d63384;
+$iy-red:     #dc3545;
+$iy-orange:  #fd7e14;
+$iy-yellow:  #ffc107;
+$iy-green:   #198754;
+$iy-teal:    #20c997;
+$iy-cyan:    #0dcaf0;
+
+$spacer: 4px !default;
+$spacers-steps: 16 !default;
+$spacers: () !default;
+
+@for $i from 0 through $spacers-steps {
+  $spacers: map-merge($spacers, ($i: $spacer * $i));
+}
+
+$border-radius: 8px;
