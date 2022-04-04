@@ -1,4 +1,12 @@
-const types = [
+interface ICategory {
+  id: number,
+  name: string,
+  description: string,
+  icon: string,
+  color: string
+}
+
+const categories: ICategory[] = [
   {
     id: 1,
     name: 'Receitas',
@@ -43,4 +51,4 @@ const types = [
   },
 ];
 
-export default types;
+export { categories, ICategory };
