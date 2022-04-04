@@ -1,10 +1,4 @@
-interface ICategory {
-  id: number,
-  name: string,
-  description: string,
-  icon: string,
-  color: string
-}
+import ICategory from '../typings/ICategory';
 
 const categories: ICategory[] = [
   {
@@ -51,4 +45,4 @@ const categories: ICategory[] = [
   },
 ];
 
-export { categories, ICategory };
+export default categories;
