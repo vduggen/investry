@@ -30,13 +30,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import FormatIcon from '../utils/formatIcon';
 
-@Component({
-  filters: {
-    currencyMask(value: number) {
-      return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    },
-  },
-})
+@Component
 export default class CardCategory extends Vue {
   @Prop({ default: '' }) icon!: string;
 
