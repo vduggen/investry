@@ -1,14 +1,10 @@
 <template>
   <v-container class="home">
-    <v-row class="header">
-      <v-col class="header__item header__item--left">
-        <BaseHeader />
-      </v-col>
-
-      <v-col class="header__item header__item--right">
+    <BaseHeader :viewRedirect="false">
+      <template #right>
         <DialogNewItem />
-      </v-col>
-    </v-row>
+      </template>
+    </BaseHeader>
 
     <v-row>
       <v-col class="iy__h-100">
@@ -21,8 +17,8 @@
                   :title="category.name"
                   :color="category.color"
                   :description="category.description"
-                  @click="redirect(category)"
                   :total="1500"
+                  @click="redirect(category)"
                 />
               </v-col>
             </div>
@@ -67,20 +63,6 @@ export default class CategoryList extends Vue {
 <style lang="scss" scoped>
 .home {
   height: 100%;
-
-  .header__item {
-    display: flex;
-    align-items: center;
-
-    &--left {
-      justify-content: flex-start;
-    }
-
-    &--right {
-      justify-content: flex-end;
-    }
-  }
-
   .main__row {
     @include d-flex;
   }
