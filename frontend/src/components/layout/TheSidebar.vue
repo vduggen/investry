@@ -53,7 +53,8 @@ export default class TheSidebar extends Vue {
   }
 
   get menus() {
-    this.routes = this.$router.options.routes || [];
+    const routes = this.$router.options.routes || [];
+    this.routes = routes.filter((item) => item.meta?.viewMenu);
 
     return this.filterRoutes();
   }
