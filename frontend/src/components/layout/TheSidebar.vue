@@ -93,7 +93,7 @@ export default class TheSidebar extends Vue {
 </script>
 
 <style lang="scss">
-@import "~vuetify/src/styles/main.sass";
+// @import "~vuetify/src/styles/main.sass";
 
 .sidebar {
   @extend .iy__box-shadow;
@@ -102,9 +102,9 @@ export default class TheSidebar extends Vue {
     display: flex;
     justify-content: center;
 
-    @extend .px-3;
-    @extend .pt-5;
-    @extend .pb-3;
+    @include px(get-spacer(3));
+    @include pt(get-spacer(5));
+    @include pb(get-spacer(3));
   }
 
   &__logo {
