@@ -5,7 +5,7 @@
     exact-path
   >
     <v-list-item-icon>
-      <v-icon>{{ icon }}</v-icon>
+      <v-icon>{{ iconComputed }}</v-icon>
     </v-list-item-icon>
 
     <v-list-item-content>
@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import FormatIcon from '../../utils/formatIcon';
 
 @Component({
 })
@@ -27,5 +28,11 @@ export default class TheSidebarMenu extends Vue {
   @Prop({ default: '' }) icon!: string;
 
   @Prop({ default: '' }) nameRoute!: string;
+
+  get iconComputed() {
+    const icon = new FormatIcon(this.icon);
+
+    return icon.getIconName();
+  }
 }
 </script>

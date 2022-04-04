@@ -10,7 +10,7 @@
     </v-tooltip>
 
     <div class="card-category__icon" :class="colors">
-      <v-icon size="2rem" color="white">mdi-{{ icon }}</v-icon>
+      <v-icon size="2rem" color="white">{{ iconComputed }}</v-icon>
     </div>
 
     <div class="card-category__title my-6">
@@ -28,6 +28,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import FormatIcon from '../utils/formatIcon';
 
 @Component({
   filters: {
@@ -53,6 +54,12 @@ export default class CardCategory extends Vue {
     return {
       [`${base}--${this.color}`]: true,
     };
+  }
+
+  get iconComputed() {
+    const icon = new FormatIcon(this.icon);
+
+    return icon.getIconName();
   }
 }
 </script>

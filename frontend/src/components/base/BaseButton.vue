@@ -1,20 +1,20 @@
 <template>
-  <v-btn v-bind="attrs">
-    <v-icon v-if="icon" left>{{ icon }}</v-icon>
+  <v-btn v-bind="attrs" v-on="$listeners">
+    <v-icon v-if="prependIcon" left>{{ prependIconComputed }}</v-icon>
     <slot></slot>
   </v-btn>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import FormatIcon from '@/utils/formatIcon';
 
 const BaseButtonProps = Vue.extend({
   props: {
-    icon: {
+    prependIcon: {
       type: String,
       default: '',
     },
-    large: Boolean,
     primary: Boolean,
     secondary: Boolean,
   },
@@ -34,12 +34,17 @@ export default class BaseButton extends BaseButtonProps {
   get attrs() {
     return {
       outlined: this.secondary,
-      large: this.large,
       depressed: true,
       color: 'primary',
       class: { ...this.classes },
       ...this.$attrs,
     };
+  }
+
+  get prependIconComputed() {
+    const icon = new FormatIcon(this.prependIcon);
+
+    return icon.getIconName();
   }
 }
 </script>
