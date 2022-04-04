@@ -12,11 +12,9 @@ export default class BaseWrapperPage extends Vue {}
 </script>
 
 <style lang="scss">
-@import "~vuetify/src/styles/main.sass";
-
 .card {
-  @extend .rounded-lg;
-  @extend .iy__h-100;
-  @extend .pa-6;
+  height: 100%;
+  padding: get-spacer(6);
+  border-radius: $border-radius;
 }
 </style>
