@@ -6,9 +6,7 @@
       </v-col>
 
       <v-col class="header__item header__item--right">
-        <BaseButton large primary icon="mdi-plus">
-          Adicionar
-        </BaseButton>
+        <DialogNewItem />
       </v-col>
     </v-row>
 
@@ -39,15 +37,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 import BaseHeader from '../components/base/BaseHeader.vue';
 import CardCategory from '../components/CardCategory.vue';
-import BaseButton from '../components/base/BaseButton.vue';
 import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
+import DialogNewItem from '../components/DialogNewItem.vue';
 import categories from '../mocks/categories';
 import ICategory from '../typings/ICategory';
 
 @Component({
   components: {
+    DialogNewItem,
     BaseWrapperPage,
-    BaseButton,
     CardCategory,
     BaseHeader,
   },
