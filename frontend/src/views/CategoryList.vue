@@ -21,7 +21,7 @@
                   :title="category.name"
                   :color="category.color"
                   :description="category.description"
-                  @click="$router.push({ name: 'home2' })"
+                  @click="redirect(category)"
                   :total="1500"
                 />
               </v-col>
@@ -50,8 +50,17 @@ import ICategory from '../typings/ICategory';
     BaseHeader,
   },
 })
-export default class HomeView extends Vue {
-  categories: ICategory[] = categories
+export default class CategoryList extends Vue {
+  categories: ICategory[] = categories;
+
+  redirect(routeInfo: ICategory) {
+    this.$router.push({
+      name: 'category-id',
+      params: {
+        id: `${routeInfo.id}`,
+      },
+    });
+  }
 }
 </script>
 
