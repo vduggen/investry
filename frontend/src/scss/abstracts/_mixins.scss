@@ -27,6 +27,15 @@
   padding-right: $value;
 }
 
+@mixin py($value) {
+  padding-top: $value;
+  padding-bottom: $value;
+}
+
+@mixin pa($value) {
+  padding: $value;
+}
+
 @mixin pt($value) {
   padding-top: $value;
 }
