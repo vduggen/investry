@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <span class="breadcrumb__title">{{ title }}</span>
+    <span class="text-h4 font-weight-bold">{{ title }}</span>
   </div>
 </template>
 
@@ -9,19 +9,8 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 export default class BaseHeader extends Vue {
-  get title() {
+  get title(): string {
     return this.$route.meta?.name;
   }
 }
 </script>
-
-<style lang="scss">
-@import "~vuetify/src/styles/main.sass";
-
-.breadcrumb {
-  &__title {
-    @extend .text-h4;
-    @extend .font-weight-bold;
-  }
-}
-</style>
