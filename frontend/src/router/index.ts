@@ -3,7 +3,8 @@ import VueRouter, { RouteConfig } from 'vue-router';
 
 import layout from '../utils/mountLayout';
 
-import HomeView from '../views/HomeView.vue';
+import CategoryList from '../views/CategoryList.vue';
+import CategorySpecific from '../views/CategorySpecific.vue';
 
 Vue.use(VueRouter);
 
@@ -11,13 +12,32 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'home',
-    components: layout.default(HomeView),
+    components: layout.default(CategoryList),
     meta: {
       name: 'Página Inicial',
       icon: 'mdi-view-dashboard',
+      viewMenu: true,
+    },
+  },
+  {
+    path: '/categoria/:id',
+    name: 'category-id',
+    components: layout.default(CategorySpecific),
+    meta: {
+      name: 'Categoria',
+      icon: 'mdi-view-dashboard',
+      viewMenu: false,
     },
   },
 ];
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    name: string,
+    icon: string,
+    viewMenu: boolean
+  }
+}
 
 const router = new VueRouter({
   mode: 'history',
