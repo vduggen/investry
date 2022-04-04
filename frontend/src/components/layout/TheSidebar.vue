@@ -15,14 +15,14 @@
             v-if="menu.children && menu.children.length > 0"
             :children="menu.children"
             :icon="menu.meta.icon"
-            :nameRoute="menu.meta.name"
+            :name-route="menu.meta.name"
           />
 
           <TheSidebarMenu
             v-else
             :aliasRoute="menu.name"
             :icon="menu.meta.icon"
-            :nameRoute="menu.meta.name"
+            :name-route="menu.meta.name"
           />
         </div>
       </v-list-item-group>
@@ -93,8 +93,6 @@ export default class TheSidebar extends Vue {
 </script>
 
 <style lang="scss">
-// @import "~vuetify/src/styles/main.sass";
-
 .sidebar {
   @extend .iy__box-shadow;
 
