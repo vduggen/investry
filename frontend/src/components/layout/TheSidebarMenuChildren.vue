@@ -1,5 +1,5 @@
 <template>
-  <v-list-group :prepend-icon="icon" no-action>
+  <v-list-group :append-icon="icon" no-action>
     <template v-slot:activator>
       <v-list-item-content>
         <v-list-item-title>
@@ -25,10 +25,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { RouteConfig } from 'vue-router';
 
 @Component({})
 export default class TheSidebarMenuChildren extends Vue {
-  @Prop({ default: [] }) children!: [];
+  @Prop({ default: [] }) children!: RouteConfig[];
 
   @Prop({ default: '' }) icon!: string;
 
