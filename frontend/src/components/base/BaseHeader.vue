@@ -9,7 +9,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 export default class BaseHeader extends Vue {
-  get title(): string {
+  get title(): string | undefined {
     return this.$route.meta?.name;
   }
 }
