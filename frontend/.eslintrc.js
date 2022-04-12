@@ -15,5 +15,10 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'import/extensions': 'off',
+    'import/no-unresolved': 'off',
+    'camelcase': {
+      ignoreDestructuring: true,
+      properties: "never"
+    }
   },
 };
