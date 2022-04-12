@@ -1,9 +1,14 @@
+import IColor from './IColor';
+
 interface ICategory {
-  id: number,
-  name: string,
-  description: string,
-  icon: string,
-  color: string
+  id: number;
+  color_id: IColor;
+  name: string;
+  description?: string;
+  icon: string;
+  deleted_at: null | Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export default ICategory;
