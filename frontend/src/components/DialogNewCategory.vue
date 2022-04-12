@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import BaseButton from './base/BaseButton.vue';
 import BaseInput from './base/BaseInput.vue';
 import BaseSelect from './base/BaseSelect.vue';

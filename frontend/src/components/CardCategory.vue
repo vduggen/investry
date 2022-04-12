@@ -1,57 +1,94 @@
 <template>
   <v-card v-bind="$attrs" v-on="$listeners" class="rounded-lg iy__box-shadow card-category">
-    <v-tooltip v-if="description" bottom>
+    <v-menu
+      v-model="showMenu"
+      absolute
+      left
+      offset-y
+      offset-x
+      origin="center center"
+      transition="scale-transition"
+      style="max-width: 600px"
+    >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon absolute top right v-bind="attrs" v-on="on">
-          <v-icon>mdi-help-circle-outline</v-icon>
+        <v-btn v-bind="attrs" v-on="on" icon absolute top right>
+          <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
-      <span>{{ description }}</span>
-    </v-tooltip>
+
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="`${item.title}-${index}`"
+          @click="item.action"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <div class="card-category__icon" :class="colors">
       <v-icon size="2rem" color="white">{{ iconComputed }}</v-icon>
     </div>
 
     <div class="card-category__title my-6">
-      <span class="text-h6 font-weight-bold">{{ title }}</span>
+      <span class="text-h6 font-weight-bold">{{ category.name }}</span>
     </div>
 
     <div class="card-category__footer">
       <span class="subtitle-1">
         <strong class="text--secondary mr-1">Total: </strong>
-        <span class="font-weight-medium">{{ total | currencyMask }}</span>
+        <span class="font-weight-medium">{{ 1500 | currencyMask }}</span>
       </span>
     </div>
   </v-card>
 </template>
 
 <script lang="ts">
+import Category from '../services/Category';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import FormatIcon from '../utils/formatIcon';
+import ICategory from '@/typings/ICategory';
 
 @Component
 export default class CardCategory extends Vue {
-  @Prop({ default: '' }) icon!: string;
+  @Prop() category!: ICategory;
 
-  @Prop({ default: '' }) title!: string;
+  showMenu = false;
 
-  @Prop({ default: 0 }) total!: number;
+  HttpCategory = new Category();
 
-  @Prop({ default: '' }) color!: string;
+  items = [
+    { title: 'Abrir', action: this.redirect },
+    { title: 'Editar' },
+    { title: 'Excluir', action: this.deleteCategory },
+  ];
 
-  @Prop({ default: '' }) description!: string;
+  redirect() {
+    this.$router.push({
+      name: 'category-id',
+      params: {
+        id: `${this.category.id}`,
+      },
+    });
+  }
 
   get colors() {
     const base = 'card-category__icon';
 
     return {
-      [`${base}--${this.color}`]: true,
+      [`${base}--${this.category.color_id.prefix}`]: true,
     };
   }
 
+  async deleteCategory() {
+    await this.HttpCategory.delete(this.category.id);
+
+    this.$emit('removeCategoryList', this.category.id);
+  }
+
   get iconComputed() {
-    const icon = new FormatIcon(this.icon);
+    const icon = new FormatIcon(this.category.icon);
 
     return icon.getIconName();
   }
@@ -62,6 +99,16 @@ export default class CardCategory extends Vue {
 .card-category {
   @include d-flex(center, center, column);
   @include set-w-h(250px);
+
+  &__header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    padding: .5rem 0.7rem;
+
+    @include d-flex(center, flex-end);
+  }
 
   &__title,
   &__footer {

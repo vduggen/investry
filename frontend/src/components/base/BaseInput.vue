@@ -5,6 +5,8 @@
     dense
     v-bind="$attrs"
     v-on="$listeners"
+    :value="value"
+    @input="$emit('input', $event)"
   />
 </template>
 
@@ -15,6 +17,7 @@ import FormatLabel from '../../utils/formatLabel';
 const BaseInputProps = Vue.extend({
   props: {
     isRequired: Boolean,
+    value: String,
   },
 });
 

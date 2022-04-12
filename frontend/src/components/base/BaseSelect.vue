@@ -1,5 +1,5 @@
 <template>
-  <v-autocomplete
+  <v-select
     dense
     outlined
     :label="labelComputed"
@@ -7,6 +7,8 @@
     v-bind="$attrs"
     v-on="$listeners"
     append-icon="mdi-chevron-down"
+    :value="value"
+    @input="$emit('input', $event)"
   />
 </template>
 
@@ -25,6 +27,8 @@ export default class BaseSelect extends BaseSelectProps {
   @Prop({ default: '' }) label!: string;
 
   @Prop({ default: [] }) items!: [];
+
+  @Prop({ default: '' }) value!: string;
 
   get labelComputed() {
     const label = new FormatLabel(this.label, this.isRequired);

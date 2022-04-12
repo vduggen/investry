@@ -2,7 +2,6 @@
   <v-container class="category">
     <BaseHeader :title="name">
       <template #right>
-        <DialogNewItem />
       </template>
     </BaseHeader>
 
@@ -46,11 +45,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import ICategory from '../typings/ICategory';
 import ITableProps from '../typings/ITableProps';
-import categories from '../mocks/categories';
 import BaseHeader from '../components/base/BaseHeader.vue';
-import DialogNewItem from '../components/DialogNewItem.vue';
 import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
 import BaseTable from '../components/base/BaseTable.vue';
 import items from '../mocks/items';
@@ -58,7 +54,6 @@ import items from '../mocks/items';
 const CategorySpecificProps = Vue.extend({
   components: {
     BaseHeader,
-    DialogNewItem,
     BaseWrapperPage,
     BaseTable,
   },
@@ -66,7 +61,7 @@ const CategorySpecificProps = Vue.extend({
 
 @Component
 export default class CategorySpecific extends CategorySpecificProps {
-  infoCategory!: ICategory;
+  infoCategory!: any;
 
   idCategory!: number;
 
@@ -112,6 +107,8 @@ export default class CategorySpecific extends CategorySpecificProps {
   }
 
   getInfoCategory() {
+    const categories = [{ id: 0 }];
+
     const [result] = categories.filter(({ id }) => id === this.idCategory);
 
     this.infoCategory = result;
