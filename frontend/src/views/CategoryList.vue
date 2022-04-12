@@ -9,7 +9,7 @@
     <v-row class="main__wrapper">
       <v-col class="iy__h-100">
         <BaseWrapperPage>
-          <div class="main__loader" v-if="loading">
+          <div class="main__loader" v-if="VuexModuleCategory.stateLoading">
             <v-progress-circular
               indeterminate
               color="primary"
@@ -17,8 +17,11 @@
             />
           </div>
 
-          <v-row v-if="getCategories.length > 0" class="main__row">
-            <div v-for="(category, index) in getCategories" :key="`category-${index}`">
+          <v-row v-else-if="VuexModuleCategory.existCategories" class="main__row">
+            <div
+              v-for="(category, index) in VuexModuleCategory.listCategories"
+              :key="`category-${index}`"
+            >
               <v-col>
                 <CardCategory :category="category" />
               </v-col>
@@ -42,20 +45,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { VuexModule } from '@/store/store.vuex';
 import BaseHeader from '../components/base/BaseHeader.vue';
 import CardCategory from '../components/CardCategory.vue';
 import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
 import DialogNewCategory from '../components/DialogNewCategory.vue';
 import Category from '../services/Category';
 import BaseButton from '../components/base/BaseButton.vue';
-import { categoriesVuex } from '../store';
-
-const CategoryListProps = Vue.extend({
-  computed: {
-    ...mapGetters(['getCategories']),
-  },
-});
 
 @Component({
   components: {
@@ -66,23 +62,27 @@ const CategoryListProps = Vue.extend({
     BaseButton,
   },
 })
-export default class CategoryList extends CategoryListProps {
-  loading = false;
-
+export default class CategoryList extends Vue {
   HttpCategory = new Category();
+
+  VuexModuleCategory = VuexModule.category;
+
+  changedCategories = this.VuexModuleCategory.changedCategories;
+
+  changedLoading = this.VuexModuleCategory.changedLoading;
 
   mounted() {
     this.getAllCategories();
   }
 
   async getAllCategories() {
-    this.loading = true;
+    this.changedLoading(true);
 
     const { data } = await this.HttpCategory.all();
 
-    this.$store.dispatch(categoriesVuex.GET_CATEGORIES, data.data);
+    this.changedCategories(data.data);
 
-    this.loading = false;
+    this.changedLoading(false);
   }
 }
 </script>

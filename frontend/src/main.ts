@@ -5,10 +5,10 @@ import 'vue-toastification/dist/index.css';
 import dayjs from 'dayjs';
 import App from './App.vue';
 import router from './router';
-import store from './store';
 import vuetify from './plugins/vuetify';
 import currencyMask from './utils/currencyMask';
 import dateMask from './utils/dateMask';
+import { store } from './store/store.vuex';
 
 Vue.config.productionTip = false;
 

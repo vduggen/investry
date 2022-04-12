@@ -47,6 +47,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ICategory from '@/typings/ICategory';
+import { VuexModule } from '@/store/store.vuex';
 import Category from '../services/Category';
 import FormatIcon from '../utils/formatIcon';
 
@@ -54,13 +55,21 @@ import FormatIcon from '../utils/formatIcon';
 export default class CardCategory extends Vue {
   @Prop() category!: ICategory;
 
+  VuexModuleCategory = VuexModule.category;
+
+  listCategories = this.VuexModuleCategory.listCategories;
+
+  changedLoading = this.VuexModuleCategory.changedLoading;
+
+  changedCategories = this.VuexModuleCategory.changedCategories;
+
   showMenu = false;
 
   HttpCategory = new Category();
 
   items = [
     { title: 'Abrir', action: this.redirect },
-    { title: 'Editar' },
+    { title: 'Editar', action: () => 'oi' },
     { title: 'Excluir', action: this.deleteCategory },
   ];
 
@@ -82,9 +91,16 @@ export default class CardCategory extends Vue {
   }
 
   async deleteCategory() {
-    await this.HttpCategory.delete(this.category.id);
+    this.changedLoading(true);
 
-    this.$emit('removeCategoryList', this.category.id);
+    const response = await this.HttpCategory.delete(this.category.id);
+
+    this.$toast.success(response.data.message);
+
+    const payload = this.listCategories.filter(({ id }) => id !== this.category.id);
+
+    this.changedCategories(payload);
+    this.changedLoading(false);
   }
 
   get iconComputed() {

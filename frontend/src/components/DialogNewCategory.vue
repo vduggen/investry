@@ -67,14 +67,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Color from '@/services/Color';
+import Category from '@/services/Category';
+import IBodyCategory from '@/typings/IBodyCategory';
+import { VuexModule } from '@/store/store.vuex';
 import BaseButton from './base/BaseButton.vue';
 import BaseInput from './base/BaseInput.vue';
 import BaseSelect from './base/BaseSelect.vue';
 import BaseDatePicker from './base/BaseDatePicker.vue';
 import BaseTextArea from './base/BaseTextArea.vue';
-import Color from '../services/Color';
-import { categoriesVuex } from '@/store';
-import Category, { IBodyCategory } from '@/services/Category';
 
 @Component({
   components: {
@@ -98,23 +99,24 @@ export default class DialogNewCategory extends Vue {
 
   HttpCategory = new Category();
 
-  category = <IBodyCategory>{};
+  $refs!: { formEditCategory: HTMLFormElement };
 
-  $refs!: {
-    formEditCategory: HTMLFormElement
-  };
+  category = {} as IBodyCategory;
+
+  VuexModuleCategory = VuexModule.category;
 
   async createCategory() {
     this.loading = true;
 
     const { data } = await this.HttpCategory.create(this.category);
-    
+
     this.$toast.success(data.message);
 
-    const categories = this.$store.getters.getCategories;
+    const categories = this.VuexModuleCategory.listCategories;
+
     const payload = [...categories, data.data];
 
-    this.$store.dispatch(categoriesVuex.GET_CATEGORIES, payload);
+    this.VuexModuleCategory.changedCategories(payload);
 
     this.closeDialog();
   }
