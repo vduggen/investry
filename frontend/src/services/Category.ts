@@ -1,29 +1,27 @@
-/* eslint-disable camelcase */
+import { AxiosResponse } from 'axios';
+import { IResponseApiComplete, IResponseApiMessage } from '@/typings/IResponseApi';
+import IBodyCategory from '@/typings/IBodyCategory';
+import ICategory from '@/typings/ICategory';
 import Http from './http';
 
-export interface IBodyCategory {
-  color_id: number;
-  name: string;
-  description: string;
-  icon: string;
-}
+type ReturnFunction = Promise<AxiosResponse<IResponseApiComplete<ICategory>>>;
 
 class Category {
   protected resource = '/categories';
 
-  public async create(body: IBodyCategory) {
+  public async create(body: IBodyCategory): ReturnFunction {
     return Http.post(this.resource, body);
   }
 
-  public async all() {
+  public async all(): Promise<AxiosResponse<IResponseApiComplete<ICategory[]>>> {
     return Http.get(this.resource);
   }
 
-  public async update(id: number, body: IBodyCategory) {
+  public async update(id: number, body: IBodyCategory): ReturnFunction {
     return Http.put(`${this.resource}/${id}`, body);
   }
 
-  public async delete(id: number) {
+  public async delete(id: number): Promise<AxiosResponse<IResponseApiMessage>> {
     return Http.delete(`${this.resource}/${id}`);
   }
 }
