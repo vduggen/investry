@@ -45,10 +45,10 @@
 </template>
 
 <script lang="ts">
-import Category from '../services/Category';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import FormatIcon from '../utils/formatIcon';
 import ICategory from '@/typings/ICategory';
+import Category from '../services/Category';
+import FormatIcon from '../utils/formatIcon';
 
 @Component
 export default class CardCategory extends Vue {

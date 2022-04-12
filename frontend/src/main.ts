@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import money from 'v-money';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 import dayjs from 'dayjs';
 import App from './App.vue';
 import router from './router';
@@ -7,9 +9,6 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import currencyMask from './utils/currencyMask';
 import dateMask from './utils/dateMask';
-import Toast from "vue-toastification";
-// Import the CSS or use your own!
-import "vue-toastification/dist/index.css";
 
 Vue.config.productionTip = false;
 
