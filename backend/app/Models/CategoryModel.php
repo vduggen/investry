@@ -18,6 +18,12 @@ class CategoryModel extends Model
 	    'name',
 	    'description',
 	    'icon',
-	    'color',
-	];
+		];
+
+		public function colorId()
+		{
+
+			return $this->hasOne(ColorsModel::class, 'id', 'color_id');
+
+		}
 }

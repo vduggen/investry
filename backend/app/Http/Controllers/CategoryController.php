@@ -20,6 +20,10 @@ class CategoryController extends Controller
     {
         $Categories = CategoryModel::all();
 
+        foreach ($Categories as $Category) {
+            $Category->colorId;
+        }
+
         return response()->data($Categories);
     }
 
@@ -35,6 +39,8 @@ class CategoryController extends Controller
         $result = CategoryModel::create($request->all());
         
         if (!$result) return response()->failure('criar');
+        
+        $result->colorId;
 
         return response()->createdSuccess($result);
     }
@@ -55,6 +61,8 @@ class CategoryController extends Controller
             return response()->notFound();
 
         }
+
+        $Category->colorId;
 
         return response()->data($Category);
     }
@@ -77,6 +85,8 @@ class CategoryController extends Controller
         $Category->fill($request->all());
 
         $result = $Category->update();
+
+        $Category->colorId;
 
         if ($result) return response()->updatedSuccess($Category);
         
