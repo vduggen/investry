@@ -1,5 +1,9 @@
 <template>
-  <v-card v-bind="$attrs" v-on="$listeners" class="rounded-lg iy__box-shadow card-category">
+  <v-card
+    v-bind="$attrs"
+    v-on="$listeners"
+    class="rounded-lg iy__box-shadow card-category"
+  >
     <v-menu
       v-model="showMenu"
       absolute
@@ -31,8 +35,10 @@
       <v-icon size="2rem" color="white">{{ iconComputed }}</v-icon>
     </div>
 
-    <div class="card-category__title my-6">
+    <div class="card-category__title d-flex flex-column text-center my-4 px-6">
       <span class="text-h6 font-weight-bold">{{ category.name }}</span>
+
+      <span class="subtitle-2 text--secondary">{{ category.description }}</span>
     </div>
 
     <div class="card-category__footer">
@@ -119,8 +125,10 @@ export default class CardCategory extends Vue {
 
 <style lang="scss" scoped>
 .card-category {
-  @include d-flex(center, center, column);
-  @include set-w-h(250px);
+  @include d-flex(center, flex-start, column);
+  width: 280px;
+  min-height: 300px;
+  padding: get-spacer(7) get-spacer(3);
 
   &__header {
     position: absolute;
