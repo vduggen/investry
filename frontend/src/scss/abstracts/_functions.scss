@@ -5,3 +5,11 @@
 @function get-spacer($index) {
   @return map-get($spacers, $index);
 }
+
+@function get-rounded($prefix) {
+  @return map-get($rounded, $prefix);
+}
+
+@function text-variant($variant) {
+  @return map-get($text, $variant);
+}

@@ -9,6 +9,15 @@
   flex-direction: $direction;
 }
 
+
+@mixin text($number) {
+  font-size: map-get($headings, $number, 'size');
+  font-weight: map-get($headings, $number, 'weight');
+  line-height: map-get($headings, $number, 'line-height');
+  letter-spacing: map-get($headings, $number, 'letter-spacing');
+  font-family: map-get($headings, $number, 'font-family');
+}
+
 @mixin set-w-h($width, $height: true) {
   @if ($height) {
     $height: $width;
