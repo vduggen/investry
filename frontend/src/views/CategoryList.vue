@@ -121,7 +121,7 @@ export default class CategoryList extends Vue {
     }
 
     &__row {
-      @include d-flex;
+      @include d-flex(flex-start);
     }
   }
 }
