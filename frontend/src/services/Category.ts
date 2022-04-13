@@ -9,6 +9,10 @@ type ReturnFunction = Promise<AxiosResponse<IResponseApiComplete<ICategory>>>;
 class Category {
   protected resource = '/categories';
 
+  protected mountResourceWithId(id: number) {
+    return `${this.resource}/${id}`;
+  }
+
   public async create(body: IBodyCategory): ReturnFunction {
     return Http.post(this.resource, body);
   }
@@ -18,11 +22,11 @@ class Category {
   }
 
   public async update(id: number, body: IBodyCategory): ReturnFunction {
-    return Http.put(`${this.resource}/${id}`, body);
+    return Http.put(this.mountResourceWithId(id), body);
   }
 
   public async delete(id: number): Promise<AxiosResponse<IResponseApiMessage>> {
-    return Http.delete(`${this.resource}/${id}`);
+    return Http.delete(this.mountResourceWithId(id));
   }
 }
 
