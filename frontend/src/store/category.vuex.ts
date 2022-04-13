@@ -11,6 +11,12 @@ class CategoryStore extends VuexModule {
 
   public loading = false;
 
+  public editCategory = <ICategory>{};
+
+  get categorySelected() {
+    return this.editCategory;
+  }
+
   get stateLoading() {
     return this.loading;
   }
@@ -29,6 +35,10 @@ class CategoryStore extends VuexModule {
 
   @mutation changedLoading(payload: boolean) {
     this.loading = payload;
+  }
+
+  @mutation changedEditCategory(payload: ICategory) {
+    this.editCategory = payload;
   }
 }
 

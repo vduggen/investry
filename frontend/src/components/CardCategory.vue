@@ -69,7 +69,7 @@ export default class CardCategory extends Vue {
 
   items = [
     { title: 'Abrir', action: this.redirect },
-    { title: 'Editar', action: () => 'oi' },
+    { title: 'Editar', action: this.handleDialog },
     { title: 'Excluir', action: this.deleteCategory },
   ];
 
@@ -88,6 +88,12 @@ export default class CardCategory extends Vue {
     return {
       [`${base}--${this.category.color_id.prefix}`]: true,
     };
+  }
+
+  handleDialog() {
+    this.$emit('handleDialog', true);
+
+    this.VuexModuleCategory.changedEditCategory(this.category);
   }
 
   async deleteCategory() {

@@ -1,5 +1,7 @@
 <template>
   <v-container class="home">
+    <DialogEditCategory v-model="dialog" />
+
     <BaseHeader :viewRedirect="false">
       <template #right>
         <DialogNewCategory />
@@ -23,7 +25,7 @@
               :key="`category-${index}`"
             >
               <v-col>
-                <CardCategory :category="category" />
+                <CardCategory :category="category" @handleDialog="handleDialog" />
               </v-col>
             </div>
           </v-row>
@@ -46,15 +48,17 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { VuexModule } from '@/store/store.vuex';
-import BaseHeader from '../components/base/BaseHeader.vue';
-import CardCategory from '../components/CardCategory.vue';
-import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
-import DialogNewCategory from '../components/DialogNewCategory.vue';
-import Category from '../services/Category';
-import BaseButton from '../components/base/BaseButton.vue';
+import BaseHeader from '@/components/base/BaseHeader.vue';
+import CardCategory from '@/components/CardCategory.vue';
+import BaseWrapperPage from '@/components/base/BaseWrapperPage.vue';
+import DialogEditCategory from '@/components/DialogEditCategory.vue';
+import DialogNewCategory from '@/components/DialogNewCategory.vue';
+import Category from '@/services/Category';
+import BaseButton from '@/components/base/BaseButton.vue';
 
 @Component({
   components: {
+    DialogEditCategory,
     DialogNewCategory,
     BaseWrapperPage,
     CardCategory,
@@ -67,12 +71,18 @@ export default class CategoryList extends Vue {
 
   VuexModuleCategory = VuexModule.category;
 
+  dialog = false;
+
   changedCategories = this.VuexModuleCategory.changedCategories;
 
   changedLoading = this.VuexModuleCategory.changedLoading;
 
   mounted() {
     this.getAllCategories();
+  }
+
+  handleDialog(val: boolean) {
+    this.dialog = val;
   }
 
   async getAllCategories() {
