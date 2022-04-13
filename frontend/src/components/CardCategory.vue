@@ -2,7 +2,7 @@
   <v-card
     v-bind="$attrs"
     v-on="$listeners"
-    class="rounded-lg iy__box-shadow card-category"
+    class="iy__box-shadow card-category"
   >
     <v-menu
       v-model="showMenu"
@@ -35,16 +35,19 @@
       <v-icon size="2rem" color="white">{{ iconComputed }}</v-icon>
     </div>
 
-    <div class="card-category__title d-flex flex-column text-center my-4 px-6">
-      <span class="text-h6 font-weight-bold">{{ category.name }}</span>
+    <div class="card-category__texts">
+      <div class="card-category__heading">
+        <span class="card-category__name">{{ category.name }}</span>
+        <span class="card-category__type"> (Ativo)</span>
+      </div>
 
-      <span class="subtitle-2 text--secondary">{{ category.description }}</span>
+      <span class="card-category__description">{{ category.description }}</span>
     </div>
 
     <div class="card-category__footer">
-      <span class="subtitle-1">
-        <strong class="text--secondary mr-1">Total: </strong>
-        <span class="font-weight-medium">{{ 1500 | currencyMask }}</span>
+      <span class="card-category__total">
+        <strong class="card-category__label">Total: </strong>
+        <span class="card-category__value">{{ 1500 | currencyMask }}</span>
       </span>
     </div>
   </v-card>
@@ -126,6 +129,7 @@ export default class CardCategory extends Vue {
 <style lang="scss" scoped>
 .card-category {
   @include d-flex(center, flex-start, column);
+  border-radius: get-rounded('lg') !important;
   width: 280px;
   min-height: 300px;
   padding: get-spacer(7) get-spacer(3);
@@ -140,7 +144,50 @@ export default class CardCategory extends Vue {
     @include d-flex(center, flex-end);
   }
 
-  &__title,
+  &__texts {
+    @include d-flex(center, center, column);
+    text-align: center;
+    margin-top: get-spacer(4);
+    margin-bottom: get-spacer(4);
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+  }
+
+  &__name {
+    @include text('h6');
+    font-weight: 700;
+  }
+
+  &__type {
+    @include text('subtitle-1');
+    color: text-variant('secondary');
+    margin-left: get-spacer(1);
+    font-weight: 500;
+  }
+
+  &__description {
+    @include text('subtitle-2');
+    color: text-variant('secondary');
+    font-weight: 400;
+  }
+
+  &__total {
+    @include text('subtitle-1');
+  }
+
+  &__label {
+    color: text-variant('secondary');
+    margin-right: get-spacer(1);
+  }
+
+  &__value {
+    font-weight: 500;
+  }
+
+  &__texts,
   &__footer {
     padding: 0;
   }
