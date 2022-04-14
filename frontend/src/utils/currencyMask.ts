@@ -5,7 +5,9 @@ function currencyMask(value: number): string {
       currency: 'BRL',
     };
 
-    return value.toLocaleString('pt-br', options);
+    const convertValue = Number(value);
+
+    return convertValue.toLocaleString('pt-br', options);
   }
 
   return 'R$ 0,00';
