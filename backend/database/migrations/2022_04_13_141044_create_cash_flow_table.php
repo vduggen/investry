@@ -20,7 +20,7 @@ class CreateCashFlowTable extends Migration
             $table->unsignedBigInteger('wallet_id');
             $table->foreign('wallet_id')->references('id')->on('wallet');
             $table->string('name', 255);
-            $table->decimal('value', 9, 3);
+            $table->decimal('value', 9, 2);
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();
