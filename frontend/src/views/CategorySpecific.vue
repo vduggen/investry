@@ -2,15 +2,16 @@
   <v-container class="category">
     <BaseHeader :title="name">
       <template #right>
+        <DialogNewCashFlow />
       </template>
     </BaseHeader>
 
     <v-row class="category__main">
       <v-col class="iy__h-100">
-        <BaseWrapperPage class="px-0 pb-0">
+        <BaseWrapperPage class="pa-0">
           <BaseTable
             :headers="table.headers"
-            :items="table.data"
+            :items="VuexModuleCashFlow.allCashFlows"
             :customs="table.customs"
             :items-per-page="paginationInfos.itemsPerPage"
             :page.sync="paginationInfos.page"
@@ -45,25 +46,32 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import CashFlow from '@/services/CashFlow';
+import { VuexModule } from '@/store/store.vuex';
 import ITableProps from '../typings/ITableProps';
 import BaseHeader from '../components/base/BaseHeader.vue';
 import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
 import BaseTable from '../components/base/BaseTable.vue';
-import items from '../mocks/items';
+import DialogNewCashFlow from '../components/DialogNewCashFlow.vue';
 
 const CategorySpecificProps = Vue.extend({
   components: {
     BaseHeader,
     BaseWrapperPage,
     BaseTable,
+    DialogNewCashFlow,
   },
 });
 
 @Component
 export default class CategorySpecific extends CategorySpecificProps {
-  infoCategory!: any;
+  infoCategory = {};
 
   idCategory!: number;
+
+  teste = '';
+
+  HttpCashFlow = new CashFlow();
 
   paginationInfos = {
     page: 1,
@@ -88,40 +96,30 @@ export default class CategorySpecific extends CategorySpecificProps {
         value: 'date',
         align: 'center',
       },
-      {
-        text: 'Descrição',
-        value: 'description',
-        align: 'center',
-      },
     ],
     customs: ['value', 'date', 'description'],
-    data: [],
   }
+
+  name = '';
+
+  VuexModuleCashFlow = VuexModule.cashflow;
+
+  changedListCashFlows = this.VuexModuleCashFlow.changedListCashFlows;
 
   created() {
     this.idCategory = parseInt(this.$route.params.id, 10);
 
-    this.getInfoCategory();
-
-    this.getItemsByCategory();
+    this.getAllCashFlows();
   }
 
-  getInfoCategory() {
-    const categories = [{ id: 0 }];
+  async getAllCashFlows() {
+    const { data } = await this.HttpCashFlow.findByCategory(this.idCategory);
 
-    const [result] = categories.filter(({ id }) => id === this.idCategory);
+    if (data.data.length > 0) {
+      this.name = data.data[0].category_id.name;
 
-    this.infoCategory = result;
-  }
-
-  getItemsByCategory() {
-    const results = items.filter(({ category }) => category === this.idCategory);
-
-    this.table.data = results;
-  }
-
-  get name() {
-    return this.infoCategory.name;
+      this.changedListCashFlows(data.data);
+    }
   }
 }
 </script>
