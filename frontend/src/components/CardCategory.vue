@@ -38,7 +38,6 @@
     <div class="card-category__texts">
       <div class="card-category__heading">
         <span class="card-category__name">{{ category.name }}</span>
-        <span class="card-category__type"> (Ativo)</span>
       </div>
 
       <span class="card-category__description">{{ category.description }}</span>
