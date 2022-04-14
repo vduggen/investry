@@ -22,8 +22,9 @@
       locale="pt-br"
       color="primary"
       v-model="date"
+      :value="value"
+      @input="handleDatePicker"
       no-title
-      @input="menu = false"
     />
   </v-menu>
 </template>
@@ -32,6 +33,7 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
+import dayjs from 'dayjs';
 import BaseInput from './BaseInput.vue';
 import FormatLabel from '../../utils/formatLabel';
 
@@ -51,9 +53,17 @@ export default class BaseDatePicker extends BaseDatePickerProps {
 
   @Prop({ default: '' }) label!: string;
 
+  @Prop({ default: '' }) value!: string;
+
   @Watch('date')
   public watchDate() {
     this.dateFormatted = this.formatDate();
+  }
+
+  handleDatePicker($event: string) {
+    this.$emit('input', $event);
+
+    this.menu = false;
   }
 
   get labelComputed() {
@@ -62,9 +72,15 @@ export default class BaseDatePicker extends BaseDatePickerProps {
     return label.getLabel();
   }
 
-  date = '2022-04-04';
+  date = 'YYYY-MM-DD';
 
-  dateFormatted = '04/04/2022';
+  dateFormatted = 'DD/MM/YYYY';
+
+  mounted() {
+    this.date = dayjs().format('YYYY-MM-DD');
+    this.dateFormatted = dayjs().format('DD/MM/YYYY');
+    this.$emit('input', this.date);
+  }
 
   get computedDateFormatted() {
     return this.formatDate;
