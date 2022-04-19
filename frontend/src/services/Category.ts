@@ -1,33 +1,40 @@
-import { AxiosResponse } from 'axios';
-import { IResponseApiComplete, IResponseApiMessage } from '@/typings/IResponseApi';
-import IBodyCategory from '@/typings/IBodyCategory';
-import ICategory from '@/typings/ICategory';
-import Http from './http';
+/* eslint-disable max-len */
+import Api from '@/typings/classes/Api';
 
-type ReturnFunction = Promise<AxiosResponse<IResponseApiComplete<ICategory>>>;
+import ITimestamps from '@/typings/interfaces/ITimestamps';
+import ISoftDeleting from '@/typings/interfaces/ISoftDeleting';
 
-class Category {
-  protected resource = '/categories';
+import TCategory from '@/typings/types/TCategory';
 
-  protected mountResourceWithId(id: number) {
-    return `${this.resource}/${id}`;
-  }
+import IID from '@/typings/interfaces/IId';
+import { IColorsModelResponse } from './Color';
 
-  public async create(body: IBodyCategory): ReturnFunction {
-    return Http.post(this.resource, body);
-  }
+const Http = new Api('/categories');
 
-  public async all(): Promise<AxiosResponse<IResponseApiComplete<ICategory[]>>> {
-    return Http.get(this.resource);
-  }
-
-  public async update(id: number, body: IBodyCategory): ReturnFunction {
-    return Http.put(this.mountResourceWithId(id), body);
-  }
-
-  public async delete(id: number): Promise<AxiosResponse<IResponseApiMessage>> {
-    return Http.delete(this.mountResourceWithId(id));
-  }
+// Interface with attributes required to create item
+interface ICategoryModel extends TCategory {
+  color_id: number;
 }
+// Interface to response
+interface ICategoryModelResponse extends ITimestamps, ISoftDeleting, TCategory, IID {
+  color_id: IColorsModelResponse;
+}
+// Interface with attributes optionals to update item
+interface TCategoryModelUpdate extends ICategoryModel, IID {}
 
-export default Category;
+const getListCategories = () => Http.all<ICategoryModelResponse>();
+const filterCategoryById = (id: number) => Http.find<ICategoryModelResponse>(id);
+const deleteCategory = (id: number) => Http.delete(id);
+const updateCategory = (id: number, body: ICategoryModel) => Http.update<ICategoryModel, ICategoryModelResponse>(id, body);
+const createCategory = (body: ICategoryModel) => Http.create<ICategoryModel, ICategoryModelResponse>(body);
+
+export {
+  getListCategories,
+  updateCategory,
+  deleteCategory,
+  filterCategoryById,
+  createCategory,
+  ICategoryModel,
+  TCategoryModelUpdate,
+  ICategoryModelResponse,
+};

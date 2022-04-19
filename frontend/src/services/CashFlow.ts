@@ -1,43 +1,27 @@
-import { AxiosResponse } from 'axios';
-import { IResponseApiComplete, IResponseApiMessage } from '@/typings/IResponseApi';
-import ICashFlow from '@/typings/ICashFlow';
-import IBodyCashFlow from '@/typings/IBodyCashFlow';
-import Http from './http';
+/* eslint-disable max-len */
+import Api from '@/typings/classes/Api';
 
-type ReturnFunctionObject = Promise<AxiosResponse<IResponseApiComplete<ICashFlow>>>;
-type ReturnFunctionArray = Promise<AxiosResponse<IResponseApiComplete<ICashFlow[]>>>;
-type ReturnFunctionMessage = Promise<AxiosResponse<IResponseApiMessage>>;
+import ITimestamps from '@/typings/interfaces/ITimestamps';
+import ISoftDeleting from '@/typings/interfaces/ISoftDeleting';
 
-class CashFlow {
-  protected resource = '/cash-flow';
+import TCashFlow from '@/typings/types/TCashFlow';
+import TOptional from '@/typings/types/TOptional';
 
-  protected mountResourceWithId(id: number) {
-    return `${this.resource}/${id}`;
-  }
+const Http = new Api('/cash-flow');
 
-  public async create(body: IBodyCashFlow): ReturnFunctionObject {
-    return Http.post(this.resource, body);
-  }
+// Interface with attributes required to create item
+type ICashFlowModel = TCashFlow
+// Interface to response
+interface ICashFlowModelResponse extends ITimestamps, ISoftDeleting, TCashFlow {}
+// Interface with attributes optionals to update item
+type TCashFlowModelBody = TOptional<TCashFlow, keyof TCashFlow>;
 
-  public async all(): ReturnFunctionArray {
-    return Http.get(this.resource);
-  }
+const getAllCashFlows = (filters?: TCashFlowModelBody) => Http.all<ICashFlowModelResponse, TCashFlowModelBody>(filters);
+const createCashFlow = (body: ICashFlowModel) => Http.create<ICashFlowModel, ICashFlowModelResponse>(body);
 
-  public async findByCategory(idCategory: number): ReturnFunctionArray {
-    return Http.get(this.resource, {
-      params: {
-        category: idCategory,
-      },
-    });
-  }
-
-  public async update(id: number, body: IBodyCashFlow): ReturnFunctionObject {
-    return Http.put(this.mountResourceWithId(id), body);
-  }
-
-  public async delete(id: number): ReturnFunctionMessage {
-    return Http.delete(this.mountResourceWithId(id));
-  }
-}
-
-export default CashFlow;
+export {
+  getAllCashFlows,
+  createCashFlow,
+  ICashFlowModel,
+  ICashFlowModelResponse,
+};

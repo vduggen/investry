@@ -1,16 +1,19 @@
-import IColor from '@/typings/IColor';
-import Http from './http';
+import Api from '@/typings/classes/Api';
 
-class Color {
-  protected resource = '/colors';
+import TColors from '@/typings/types/TColors';
 
-  public async all() {
-    return Http.get(this.resource);
-  }
+import ISoftDeleting from '@/typings/interfaces/ISoftDeleting';
+import ITimestamps from '@/typings/interfaces/ITimestamps';
+import IID from '@/typings/interfaces/IId';
 
-  public async create(body: IColor) {
-    return Http.post(this.resource, body);
-  }
-}
+const Http = new Api('/colors');
 
-export default Color;
+// Interface to response
+interface IColorsModelResponse extends ITimestamps, ISoftDeleting, TColors, IID {}
+
+const getAllColors = () => Http.all<IColorsModelResponse>();
+
+export {
+  getAllColors,
+  IColorsModelResponse,
+};
