@@ -54,14 +54,17 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ICategory from '@/typings/ICategory';
 import { VuexModule } from '@/store/store.vuex';
-import Category from '../services/Category';
+import {
+  deleteCategory,
+  ICategoryModelResponse,
+  TCategoryModelUpdate,
+} from '@/services/Category';
 import FormatIcon from '../utils/formatIcon';
 
 @Component
 export default class CardCategory extends Vue {
-  @Prop() category!: ICategory;
+  @Prop() category!: ICategoryModelResponse;
 
   VuexModuleCategory = VuexModule.category;
 
@@ -73,12 +76,10 @@ export default class CardCategory extends Vue {
 
   showMenu = false;
 
-  HttpCategory = new Category();
-
   items = [
     { title: 'Abrir', action: this.redirect },
-    { title: 'Editar', action: this.handleDialog },
-    { title: 'Excluir', action: this.deleteCategory },
+    { title: 'Editar', action: this.handleDialogEditCategory },
+    { title: 'Excluir', action: this.httpDeleteCategory },
   ];
 
   redirect() {
@@ -98,22 +99,29 @@ export default class CardCategory extends Vue {
     };
   }
 
-  handleDialog() {
+  handleDialogEditCategory() {
     this.$emit('handleDialog', true);
 
-    this.VuexModuleCategory.changedEditCategory(this.category);
+    const payload: TCategoryModelUpdate = {
+      id: this.category.id,
+      name: this.category.name,
+      icon: this.category.icon,
+      description: this.category.description,
+      color_id: this.category.color_id.id,
+    };
+
+    this.VuexModuleCategory.changedEditCategory(payload);
   }
 
-  async deleteCategory() {
+  async httpDeleteCategory() {
     this.changedLoading(true);
 
-    const response = await this.HttpCategory.delete(this.category.id);
+    const { data } = await deleteCategory(this.category.id);
 
-    this.$toast.success(response.data.message);
-
+    this.$toast.success(data.message);
     const payload = this.listCategories.filter(({ id }) => id !== this.category.id);
-
     this.changedCategories(payload);
+
     this.changedLoading(false);
   }
 
