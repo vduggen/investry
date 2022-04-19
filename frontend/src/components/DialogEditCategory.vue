@@ -28,7 +28,7 @@
             <v-col class="pl-0">
               <BaseSelect
                 isRequired
-                :items="colors"
+                :items="VuexModuleColors.getListColors"
                 label="Cor"
                 item-text="name"
                 item-value="id"
@@ -62,19 +62,18 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import Color from '@/services/Color';
-import Category from '@/services/Category';
+import {
+  updateCategory,
+  TCategoryModelUpdate,
+  ICategoryModel,
+  ICategoryModelResponse,
+} from '@/services/Category';
 import { VuexModule } from '@/store/store.vuex';
-import IBodyCategory from '@/typings/IBodyCategory';
 import BaseButton from './base/BaseButton.vue';
 import BaseInput from './base/BaseInput.vue';
 import BaseSelect from './base/BaseSelect.vue';
 import BaseDatePicker from './base/BaseDatePicker.vue';
 import BaseTextArea from './base/BaseTextArea.vue';
-
-interface InputsValue extends IBodyCategory {
-  id: number;
-}
 
 @Component({
   components: {
@@ -88,46 +87,53 @@ interface InputsValue extends IBodyCategory {
 export default class DialogEditCategory extends Vue {
   @Prop({ default: false }) value!: boolean;
 
-  colors = [];
-
   valid = true;
 
   loading = false;
 
-  HttpColor = new Color();
-
-  HttpCategory = new Category();
-
   $refs!: { formEditCategory: HTMLFormElement };
 
-  category = {} as InputsValue;
+  category = {} as TCategoryModelUpdate;
 
   VuexModuleCategory = VuexModule.category;
+
+  VuexModuleColors = VuexModule.colors;
 
   async editCategory() {
     this.loading = true;
 
-    const body: IBodyCategory = {
-      color_id: Number(this.category.color_id),
+    const body: ICategoryModel = {
+      color_id: this.category.color_id,
       description: this.category.description,
       icon: this.category.icon,
       name: this.category.name,
     };
 
-    const { data } = await this.HttpCategory.update(this.category.id, body);
+    const { data } = await updateCategory(this.category.id, body);
 
     this.$toast.success(data.message);
 
-    const categories = this.VuexModuleCategory.listCategories;
-
-    const payload = categories.map((category) => (category.id === this.category.id
-      ? data.data
-      : category
-    ));
-
+    const payload = this.updateListToPayload(data.data);
     this.VuexModuleCategory.changedCategories(payload);
 
     this.closeDialog();
+  }
+
+  updateListToPayload(dataApi: ICategoryModelResponse) {
+    const categories = this.VuexModuleCategory.listCategories;
+
+    return categories.map((currentCategory) => {
+      /**
+       * Se for a categoria selecionada substitui o objeto que existe com
+       * as informações retornadas da API
+       */
+      if (currentCategory.id === this.category.id) {
+        return dataApi;
+      }
+
+      // Caso não for apenas não substitui nada
+      return currentCategory;
+    });
   }
 
   closeDialog() {
@@ -136,27 +142,11 @@ export default class DialogEditCategory extends Vue {
     this.$refs.formEditCategory.reset();
   }
 
-  mounted() {
-    this.getAllColors();
-  }
-
-  async getAllColors() {
-    const { data } = await this.HttpColor.all();
-
-    this.colors = data.data;
-  }
-
   get show() {
     if (this.value) {
       const { categorySelected } = this.VuexModuleCategory;
 
-      this.category = {
-        description: categorySelected.description,
-        icon: categorySelected.icon,
-        id: categorySelected.id,
-        name: categorySelected.name,
-        color_id: Number(categorySelected.color_id.id),
-      };
+      this.category = { ...categorySelected };
     }
 
     return this.value;

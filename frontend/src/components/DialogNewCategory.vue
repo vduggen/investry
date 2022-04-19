@@ -33,7 +33,7 @@
             <v-col class="pl-0">
               <BaseSelect
                 isRequired
-                :items="colors"
+                :items="VuexModuleColors.getListColors"
                 label="Cor"
                 item-text="name"
                 item-value="id"
@@ -54,7 +54,7 @@
       <footer class="d-flex justify-center">
         <BaseButton
           :loading="loading"
-          @click="createCategory"
+          @click="HttpCreateCategory"
           large
           primary
         >
@@ -67,9 +67,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Color from '@/services/Color';
-import Category from '@/services/Category';
-import IBodyCategory from '@/typings/IBodyCategory';
+import { createCategory, ICategoryModel } from '@/services/Category';
 import { VuexModule } from '@/store/store.vuex';
 import BaseButton from './base/BaseButton.vue';
 import BaseInput from './base/BaseInput.vue';
@@ -95,20 +93,18 @@ export default class DialogNewCategory extends Vue {
 
   loading = false;
 
-  HttpColor = new Color();
-
-  HttpCategory = new Category();
-
   $refs!: { formEditCategory: HTMLFormElement };
 
-  category = {} as IBodyCategory;
+  category = {} as ICategoryModel;
 
   VuexModuleCategory = VuexModule.category;
 
-  async createCategory() {
+  VuexModuleColors = VuexModule.colors;
+
+  async HttpCreateCategory() {
     this.loading = true;
 
-    const { data } = await this.HttpCategory.create(this.category);
+    const { data } = await createCategory(this.category);
 
     this.$toast.success(data.message);
 
@@ -125,16 +121,6 @@ export default class DialogNewCategory extends Vue {
     this.loading = false;
     this.show = false;
     this.$refs.formEditCategory.reset();
-  }
-
-  mounted() {
-    this.getAllColors();
-  }
-
-  async getAllColors() {
-    const { data } = await this.HttpColor.all();
-
-    this.colors = data.data;
   }
 }
 </script>

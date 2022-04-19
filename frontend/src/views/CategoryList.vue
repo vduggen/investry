@@ -12,11 +12,7 @@
       <v-col class="iy__h-100">
         <BaseWrapperPage>
           <div class="main__loader" v-if="VuexModuleCategory.stateLoading">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-              :size="70"
-            />
+            <BaseLoader />
           </div>
 
           <v-row v-else-if="VuexModuleCategory.existCategories" class="main__row">
@@ -53,8 +49,10 @@ import CardCategory from '@/components/CardCategory.vue';
 import BaseWrapperPage from '@/components/base/BaseWrapperPage.vue';
 import DialogEditCategory from '@/components/DialogEditCategory.vue';
 import DialogNewCategory from '@/components/DialogNewCategory.vue';
-import Category from '@/services/Category';
+import { getListCategories } from '@/services/Category';
 import BaseButton from '@/components/base/BaseButton.vue';
+import BaseLoader from '@/components/base/BaseLoader.vue';
+import { getAllColors } from '@/services/Color';
 
 @Component({
   components: {
@@ -64,12 +62,13 @@ import BaseButton from '@/components/base/BaseButton.vue';
     CardCategory,
     BaseHeader,
     BaseButton,
+    BaseLoader,
   },
 })
 export default class CategoryList extends Vue {
-  HttpCategory = new Category();
-
   VuexModuleCategory = VuexModule.category;
+
+  VuexModuleColors = VuexModule.colors;
 
   dialog = false;
 
@@ -78,21 +77,34 @@ export default class CategoryList extends Vue {
   changedLoading = this.VuexModuleCategory.changedLoading;
 
   mounted() {
-    this.getAllCategories();
+    Promise.all([
+      this.HttpGetAllColors(),
+      this.getAllCategories(),
+    ]);
   }
 
   handleDialog(val: boolean) {
     this.dialog = val;
   }
 
+  async HttpGetAllColors() {
+    if (this.VuexModuleColors.listColorsIsEmpty) {
+      const { data } = await getAllColors();
+
+      this.VuexModuleColors.changedListColors(data.data);
+    }
+  }
+
   async getAllCategories() {
-    this.changedLoading(true);
+    if (this.VuexModuleCategory.listCategoriesIsEmpty) {
+      this.changedLoading(true);
 
-    const { data } = await this.HttpCategory.all();
+      const { data } = await getListCategories();
 
-    this.changedCategories(data.data);
+      this.changedCategories(data.data);
 
-    this.changedLoading(false);
+      this.changedLoading(false);
+    }
   }
 }
 </script>

@@ -7,37 +7,43 @@
     </BaseHeader>
 
     <v-row class="category__main">
-      <v-col class="iy__h-100">
+      <v-col  class="iy__h-100">
         <BaseWrapperPage class="pa-0">
-          <BaseTable
-            :headers="table.headers"
-            :items="VuexModuleCashFlow.allCashFlows"
-            :customs="table.customs"
-            :items-per-page="paginationInfos.itemsPerPage"
-            :page.sync="paginationInfos.page"
-            hide-default-footer
-            @page-count="paginationInfos.pageCount = $event"
-          >
-            <template #[`value`]="{ item }">
-              {{ item.value | currencyMask }}
-            </template>
+          <div v-if="loading" class="category__loader">
+            <BaseLoader />
+          </div>
 
-            <template #[`date`]="{ item }">
-              {{ item.date | dateMask }}
-            </template>
+          <div v-else>
+            <BaseTable
+              :headers="table.headers"
+              :items="VuexModuleCashFlow.allCashFlows"
+              :customs="table.customs"
+              :items-per-page="paginationInfos.itemsPerPage"
+              :page.sync="paginationInfos.page"
+              hide-default-footer
+              @page-count="paginationInfos.pageCount = $event"
+            >
+              <template #[`value`]="{ item }">
+                {{ item.value | currencyMask }}
+              </template>
 
-            <template #[`description`]="{ item }">
-              {{ item.description || '-' }}
-            </template>
-          </BaseTable>
-          <v-divider />
+              <template #[`date`]="{ item }">
+                {{ item.date | dateMask }}
+              </template>
 
-          <v-pagination
-            class="mt-5"
-            v-model="paginationInfos.page"
-            :length="paginationInfos.pageCount"
-          />
+              <template #[`description`]="{ item }">
+                {{ item.description || '-' }}
+              </template>
+            </BaseTable>
 
+            <v-divider />
+
+            <v-pagination
+              class="mt-5"
+              v-model="paginationInfos.page"
+              :length="paginationInfos.pageCount"
+            />
+          </div>
         </BaseWrapperPage>
       </v-col>
     </v-row>
@@ -46,13 +52,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import CashFlow from '@/services/CashFlow';
+import { getAllCashFlows } from '@/services/CashFlow';
+import { filterCategoryById } from '@/services/Category';
 import { VuexModule } from '@/store/store.vuex';
-import ITableProps from '../typings/ITableProps';
+import ITableProps from '../typings/interfaces/ITableProps';
 import BaseHeader from '../components/base/BaseHeader.vue';
 import BaseWrapperPage from '../components/base/BaseWrapperPage.vue';
 import BaseTable from '../components/base/BaseTable.vue';
 import DialogNewCashFlow from '../components/DialogNewCashFlow.vue';
+import BaseLoader from '../components/base/BaseLoader.vue';
 
 const CategorySpecificProps = Vue.extend({
   components: {
@@ -60,6 +68,7 @@ const CategorySpecificProps = Vue.extend({
     BaseWrapperPage,
     BaseTable,
     DialogNewCashFlow,
+    BaseLoader,
   },
 });
 
@@ -71,13 +80,13 @@ export default class CategorySpecific extends CategorySpecificProps {
 
   teste = '';
 
-  HttpCashFlow = new CashFlow();
-
   paginationInfos = {
     page: 1,
     pageCount: 0,
     itemsPerPage: 7,
   }
+
+  loading = false;
 
   table: ITableProps = {
     headers: [
@@ -100,7 +109,7 @@ export default class CategorySpecific extends CategorySpecificProps {
     customs: ['value', 'date', 'description'],
   }
 
-  name = '';
+  name = '...';
 
   VuexModuleCashFlow = VuexModule.cashflow;
 
@@ -109,17 +118,28 @@ export default class CategorySpecific extends CategorySpecificProps {
   created() {
     this.idCategory = parseInt(this.$route.params.id, 10);
 
-    this.getAllCashFlows();
+    Promise.all([
+      this.HttpGetInfoCategory(),
+      this.HttpAllCashFlows(),
+    ]);
   }
 
-  async getAllCashFlows() {
-    const { data } = await this.HttpCashFlow.findByCategory(this.idCategory);
+  async HttpGetInfoCategory() {
+    const { data } = await filterCategoryById(this.idCategory);
 
-    if (data.data.length > 0) {
-      this.name = data.data[0].category_id.name;
+    this.name = data.data.name;
+  }
 
-      this.changedListCashFlows(data.data);
-    }
+  async HttpAllCashFlows() {
+    this.loading = true;
+
+    const { data } = await getAllCashFlows({
+      category_id: this.idCategory,
+    });
+
+    this.changedListCashFlows(data.data);
+
+    this.loading = false;
   }
 }
 </script>
@@ -127,6 +147,11 @@ export default class CategorySpecific extends CategorySpecificProps {
 <style lang="scss" scoped>
 .category {
   height: 100%;
+
+  &__loader {
+    @include set-w-h(100%);
+    @include d-flex;
+  }
 
   &__main {
     height: calc(100% - 68px);

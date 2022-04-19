@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import CashFlow from '@/services/CashFlow';
+import { createCashFlow, ICashFlowModel } from '@/services/CashFlow';
 import currencyUnmask from '@/utils/currencyUnmask';
 import { VuexModule } from '@/store/store.vuex';
 import BaseButton from './base/BaseButton.vue';
@@ -81,7 +81,7 @@ import BaseDatePicker from './base/BaseDatePicker.vue';
 interface InputsValue {
   name: string;
   value: string;
-  date: Date;
+  date: string;
 }
 
 @Component({
@@ -106,8 +106,6 @@ export default class DialogNewCashFlow extends Vue {
     masked: false,
   }
 
-  HttpCashFlow = new CashFlow();
-
   $refs!: { formNewCashFlow: HTMLFormElement };
 
   cashflow = {} as InputsValue;
@@ -119,12 +117,14 @@ export default class DialogNewCashFlow extends Vue {
   async create() {
     this.loading = true;
 
-    const { data } = await this.HttpCashFlow.create({
+    const body: ICashFlowModel = {
       ...this.cashflow,
       wallet_id: 1,
       value: currencyUnmask(this.cashflow.value),
       category_id: Number(this.$route.params.id),
-    });
+    };
+
+    const { data } = await createCashFlow(body);
 
     const ListCashFlows = this.VuexModuleCashFlow.allCashFlows;
 
