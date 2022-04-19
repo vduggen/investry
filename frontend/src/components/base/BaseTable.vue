@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ITableHeader from '../../typings/ITableHeader';
+import ITableHeader from '../../typings/interfaces/ITableHeader';
 
 @Component
 export default class BaseTable extends Vue {
