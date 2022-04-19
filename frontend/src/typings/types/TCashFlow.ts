@@ -1,9 +1,9 @@
-interface IBodyCashFlow {
+type TCashFlow = {
   category_id: number;
   wallet_id: number;
   name: string;
   value: number;
-  date: Date;
-}
+  date: string;
+};
 
-export default IBodyCashFlow;
+export default TCashFlow;
