@@ -1,5 +1,5 @@
 import { createModule, mutation } from 'vuex-class-component';
-import ICashFlow from '@/typings/ICashFlow';
+import { ICashFlowModelResponse } from '@/services/CashFlow';
 
 const VuexModule = createModule({
   namespaced: 'cashflow',
@@ -7,13 +7,13 @@ const VuexModule = createModule({
 });
 
 class CashFlowStore extends VuexModule {
-  public listCashflow: ICashFlow[] = [];
+  public listCashflow: ICashFlowModelResponse[] = [];
 
   get allCashFlows() {
     return this.listCashflow;
   }
 
-  @mutation changedListCashFlows(payload: ICashFlow[]) {
+  @mutation changedListCashFlows(payload: ICashFlowModelResponse[]) {
     this.listCashflow = payload;
   }
 }
