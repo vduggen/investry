@@ -9,18 +9,12 @@ const VuexModule = createModule({
 class CategoryStore extends VuexModule {
   public categories: ICategoryModelResponse[] = [];
 
-  public id = 0;
-
   public loading = false;
 
   public editCategory = <TCategoryModelUpdate>{};
 
   get categorySelected() {
     return this.editCategory;
-  }
-
-  get categoryId() {
-    return this.id;
   }
 
   get stateLoading() {
@@ -49,10 +43,6 @@ class CategoryStore extends VuexModule {
 
   @mutation changedEditCategory(payload: TCategoryModelUpdate) {
     this.editCategory = payload;
-  }
-
-  @mutation changedCategoryId(payload: number) {
-    this.id = payload;
   }
 }
 
