@@ -127,7 +127,7 @@ export default class CategoryList extends Vue {
     }
 
     &__wrapper {
-      height: calc(100% - 68px);
+      height: calc(100% - 14%);
     }
 
     &__row {

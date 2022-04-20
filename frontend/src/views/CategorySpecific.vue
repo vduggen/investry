@@ -154,7 +154,7 @@ export default class CategorySpecific extends CategorySpecificProps {
   }
 
   &__main {
-    height: calc(100% - 68px);
+    height: calc(100% - 14%);
   }
 }
 </style>
