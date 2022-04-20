@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { createCashFlow, ICashFlowModel } from '@/services/CashFlow';
+import { createCashFlow, ICashFlowModel, ICashFlowModelResponse } from '@/services/CashFlow';
 import currencyUnmask from '@/utils/currencyUnmask';
 import { VuexModule } from '@/store/store.vuex';
 import BaseButton from './base/BaseButton.vue';
@@ -112,7 +112,11 @@ export default class DialogNewCashFlow extends Vue {
 
   VuexModuleCashFlow = VuexModule.cashflow;
 
+  VuexModuleCategory = VuexModule.category;
+
   changedListCashFlows = this.VuexModuleCashFlow.changedListCashFlows;
+
+  changedCategories = this.VuexModuleCategory.changedCategories;
 
   async create() {
     this.loading = true;
@@ -126,15 +130,46 @@ export default class DialogNewCashFlow extends Vue {
 
     const { data } = await createCashFlow(body);
 
-    const ListCashFlows = this.VuexModuleCashFlow.allCashFlows;
-
-    const payload = [...ListCashFlows, data.data];
-
-    this.changedListCashFlows(payload);
+    const newList = this.updateListCashFlow(data.data);
 
     this.$toast.success(data.message);
 
+    this.updateValueTotalCategory(newList);
+
     this.closeDialog();
+  }
+
+  updateListCashFlow(dataApi: ICashFlowModelResponse) {
+    const ListCashFlows = this.VuexModuleCashFlow.allCashFlows;
+
+    const payload = [...ListCashFlows, dataApi];
+
+    this.changedListCashFlows(payload);
+
+    return payload;
+  }
+
+  updateValueTotalCategory(ListCashFlows: ICashFlowModelResponse[]) {
+    const formatArray = ListCashFlows.map(({ value }) => Number(value));
+
+    const result: number = formatArray.reduce((previousValue, currentValue) => previousValue + currentValue);
+
+    const { categories } = this.VuexModuleCategory;
+
+    const idCategory = Number(this.$route.params.id);
+
+    const payload = categories.map((category) => {
+      if (category.id === idCategory) {
+        return {
+          ...category,
+          cash_flow_total: result,
+        };
+      }
+
+      return category;
+    });
+
+    this.changedCategories(payload);
   }
 
   closeDialog() {
