@@ -26,4 +26,11 @@ class CategoryModel extends Model
 			return $this->hasOne(ColorsModel::class, 'id', 'color_id');
 
 		}
+
+		public function cashFlowCount()
+		{
+
+			return $this->hasMany(CashFlowModel::class, 'category_id', 'id');
+
+		}
 }

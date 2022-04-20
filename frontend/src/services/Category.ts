@@ -18,6 +18,7 @@ interface ICategoryModel extends TCategory {
 // Interface to response
 interface ICategoryModelResponse extends ITimestamps, ISoftDeleting, TCategory, IID {
   color_id: IColorsModelResponse;
+  cash_flow_total: number | string;
 }
 // Interface with attributes optionals to update item
 interface TCategoryModelUpdate extends ICategoryModel, IID {}

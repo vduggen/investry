@@ -46,7 +46,7 @@
     <div class="card-category__footer">
       <span class="card-category__total">
         <strong class="card-category__label">Total: </strong>
-        <span class="card-category__value">{{ 1500 | currencyMask }}</span>
+        <span class="card-category__value">{{ category.cash_flow_total | currencyMask }}</span>
       </span>
     </div>
   </v-card>

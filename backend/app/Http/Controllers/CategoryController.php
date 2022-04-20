@@ -18,7 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $Categories = CategoryModel::all();
+        $Categories = CategoryModel::withSum('cashFlowCount as cash_flow_total', 'value')->get();
 
         foreach ($Categories as $Category) {
             $Category->colorId;

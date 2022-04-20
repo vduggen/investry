@@ -96,15 +96,13 @@ export default class CategoryList extends Vue {
   }
 
   async getAllCategories() {
-    if (this.VuexModuleCategory.listCategoriesIsEmpty) {
-      this.changedLoading(true);
+    this.changedLoading(true);
 
-      const { data } = await getListCategories();
+    const { data } = await getListCategories();
 
-      this.changedCategories(data.data);
+    this.changedCategories(data.data);
 
-      this.changedLoading(false);
-    }
+    this.changedLoading(false);
   }
 }
 </script>
